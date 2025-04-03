@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 description = "Control mouse using keyboard via uinput"
 authors = ["joao noemail@yeahnoemail.bla"]
+license = "MIT"
 
 [dependencies]
 # Linux input handling

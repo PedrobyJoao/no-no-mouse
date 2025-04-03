@@ -58,7 +58,11 @@ Create an issue or a PR.
 If you use AIs as code assistants, a good thing is to add both `./prompt.md`
 and `./specs.md` to their context.
 
-### Similar projects
+## License
+
+MIT.
+
+## Similar projects
 
 - [philipl/evdevremapkeys](https://github.com/philipl/evdevremapkeys)
 
