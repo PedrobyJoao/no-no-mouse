@@ -69,5 +69,6 @@ MIT.
 ## TODOs
 
 - [ ]: Enable choosing mod key from config
-- [ ]: Tests
 - [ ]: Docs: Usage
+- [ ]: Tests
+- [ ]: build as a nix pkg
