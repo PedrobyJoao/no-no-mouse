@@ -51,7 +51,7 @@ before running it.
 You want to save your wrists but you do not want to
 risk hurting your computer.
 
-> If you're using Ubuntu or any Linux distro with X11,
+> **Important: If you're using Ubuntu or any Linux distro with X11**,
 > you might look for some other project that does not rely
 > on `sudo`. See the [Similar projects](#Similar-projects) section.
 
