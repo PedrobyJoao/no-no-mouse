@@ -1,8 +1,10 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use evdev::{Device, EventType, InputEvent, RelativeAxisType};
+use evdev::{Device, EventType, InputEvent};
 use log::{debug, info, warn};
 use std::path::PathBuf;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::Duration;
 use uinput::event::controller::Mouse;
 
@@ -37,6 +39,14 @@ fn main() -> Result<()> {
     // Initialize logger
     env_logger::init();
     info!("Starting keyboard-mouse control");
+
+    // Set up signal handler for clean shutdown
+    let running = Arc::new(AtomicBool::new(true));
+    let r = running.clone();
+    ctrlc::set_handler(move || {
+        info!("Received termination signal, shutting down...");
+        r.store(false, Ordering::SeqCst);
+    }).expect("Error setting Ctrl-C handler");
 
     // Parse command line arguments
     let args = Args::parse();
@@ -87,7 +97,7 @@ fn main() -> Result<()> {
     let mut shift_pressed = false;
 
     // Main event loop
-    loop {
+    while running.load(Ordering::SeqCst) {
         // Read events from keyboard
         if let Ok(events) = keyboard.fetch_events() {
             for event in events {
@@ -118,6 +128,13 @@ fn main() -> Result<()> {
         // Small sleep to avoid consuming too much CPU
         std::thread::sleep(Duration::from_millis(10));
     }
+
+    // Clean up resources before exiting
+    info!("Releasing keyboard device");
+    keyboard.ungrab().ok();
+    info!("Cleanup complete, exiting");
+    
+    Ok(())
 }
 
 fn load_config(path: &PathBuf) -> Result<Config> {
@@ -158,7 +175,7 @@ fn process_event(
     l_pressed: &mut bool,
     shift_pressed: &mut bool,
     mouse: &mut uinput::Device,
-    config: &Config,
+    _config: &Config,
 ) -> Result<()> {
     // Only process key events
     if event.event_type() != EventType::KEY {
@@ -230,7 +247,8 @@ fn process_event(
         KEY_ESC => {
             if pressed {
                 info!("ESC key pressed, exiting application");
-                return Ok(());
+                // Just exit the program
+                std::process::exit(0);
             }
         }
         _ => {}
