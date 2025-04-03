@@ -1,0 +1,30 @@
+[package]
+name = "keyboard-mouse"
+version = "0.1.0"
+edition = "2021"
+description = "Control mouse using keyboard via uinput"
+authors = ["joao noemail@yeahnoemail.bla"]
+
+[dependencies]
+# Linux input handling
+evdev = "0.12.1"
+input-linux-sys = "0.8.0"
+uinput = "0.1.3"
+
+# Configuration
+toml = "0.7.6"
+clap = { version = "4.4.6", features = ["derive"] }
+
+# Error handling
+anyhow = "1.0.75"
+thiserror = "1.0.49"
+
+# Logging
+log = "0.4.20"
+env_logger = "0.10.0"
+
+[profile.release]
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
