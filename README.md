@@ -51,6 +51,10 @@ before running it.
 You want to save your wrists but you do not want to
 risk hurting your computer.
 
+> If you're using Ubuntu or any Linux distro with X11,
+> you might look for some other project that does not rely
+> on `sudo`. See the [Similar projects](#Similar-projects) section.
+
 ## Contributing
 
 Create an issue or a PR.
@@ -65,9 +69,15 @@ MIT.
 ## Similar projects
 
 - [philipl/evdevremapkeys](https://github.com/philipl/evdevremapkeys)
+- [jordansissel/keynav](https://github.com/jordansissel/keynav) (only X11)
+- If you have a full Gnome setup (e.g.: with Ubuntu), you can try
+  their keyboard accessibility feature (not sure how complete is)
 
 ## TODOs
 
+- [ ]: it does not need to press
+- [ ]: Scrolling
+  - [ ]: Page up, Page down?
 - [ ]: Enable choosing mod key from config
 - [ ]: Docs: Usage
 - [ ]: Tests
