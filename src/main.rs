@@ -29,7 +29,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             keyboard_device: "/dev/input/event0".to_string(),
-            base_speed: 5,
+            base_speed: 20,
             shift_multiplier: 3,
         }
     }
@@ -46,7 +46,8 @@ fn main() -> Result<()> {
     ctrlc::set_handler(move || {
         info!("Received termination signal, shutting down...");
         r.store(false, Ordering::SeqCst);
-    }).expect("Error setting Ctrl-C handler");
+    })
+    .expect("Error setting Ctrl-C handler");
 
     // Parse command line arguments
     let args = Args::parse();
@@ -63,8 +64,10 @@ fn main() -> Result<()> {
     debug!("Using configuration: {:?}", config);
 
     // Open keyboard device
-    let mut keyboard = Device::open(&config.keyboard_device)
-        .context(format!("Failed to open keyboard device: {}", config.keyboard_device))?;
+    let mut keyboard = Device::open(&config.keyboard_device).context(format!(
+        "Failed to open keyboard device: {}",
+        config.keyboard_device
+    ))?;
 
     // Set keyboard to non-blocking mode
     keyboard.grab().context("Failed to grab keyboard device")?;
@@ -133,33 +136,33 @@ fn main() -> Result<()> {
     info!("Releasing keyboard device");
     keyboard.ungrab().ok();
     info!("Cleanup complete, exiting");
-    
+
     Ok(())
 }
 
 fn load_config(path: &PathBuf) -> Result<Config> {
-    let config_str = std::fs::read_to_string(path)
-        .context(format!("Failed to read config file: {:?}", path))?;
-    
-    let config_toml: toml::Value = toml::from_str(&config_str)
-        .context("Failed to parse TOML config")?;
-    
+    let config_str =
+        std::fs::read_to_string(path).context(format!("Failed to read config file: {:?}", path))?;
+
+    let config_toml: toml::Value =
+        toml::from_str(&config_str).context("Failed to parse TOML config")?;
+
     let keyboard_device = config_toml
         .get("keyboard_device")
         .and_then(|v| v.as_str())
         .unwrap_or("/dev/input/event0")
         .to_string();
-    
+
     let base_speed = config_toml
         .get("base_speed")
         .and_then(|v| v.as_integer())
         .unwrap_or(5) as i32;
-    
+
     let shift_multiplier = config_toml
         .get("shift_multiplier")
         .and_then(|v| v.as_integer())
         .unwrap_or(3) as i32;
-    
+
     Ok(Config {
         keyboard_device,
         base_speed,
