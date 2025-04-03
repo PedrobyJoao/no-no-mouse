@@ -46,6 +46,7 @@
           rust-analyzer
           rustfmt
           clippy
+          evtest
         ];
 
       in

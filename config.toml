@@ -1,0 +1,11 @@
+# Keyboard-Mouse Control Configuration
+
+# Path to the keyboard device to monitor
+# Use 'ls /dev/input/event*' and 'evtest' to find the right device
+keyboard_device = "/dev/input/event0"
+
+# Base movement speed in pixels
+base_speed = 5
+
+# Multiplier when shift is held
+shift_multiplier = 3
